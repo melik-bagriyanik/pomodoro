@@ -1,0 +1,346 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Pause, RotateCcw, Wind } from "lucide-react";
+
+export function BreathingExercise() {
+  const [isActive, setIsActive] = useState(false);
+  const [phase, setPhase] = useState<'inhale' | 'hold' | 'exhale' | 'pause'>('inhale');
+  const [cycle, setCycle] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
+
+  const breathingPattern = {
+    inhale: 4, // 4 seconds
+    hold: 4,   // 4 seconds
+    exhale: 6, // 6 seconds
+    pause: 2   // 2 seconds
+  };
+
+  const totalCycles = 4;
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    let currentPhase: keyof typeof breathingPattern = 'inhale';
+    let phaseTime = 0;
+
+    if (isActive && !isComplete) {
+      interval = setInterval(() => {
+        phaseTime++;
+        
+        if (phaseTime >= breathingPattern[currentPhase]) {
+          // Move to next phase
+          switch (currentPhase) {
+            case 'inhale':
+              currentPhase = 'hold';
+              setPhase('hold');
+              break;
+            case 'hold':
+              currentPhase = 'exhale';
+              setPhase('exhale');
+              break;
+            case 'exhale':
+              currentPhase = 'pause';
+              setPhase('pause');
+              break;
+            case 'pause':
+              currentPhase = 'inhale';
+              setPhase('inhale');
+              setCycle(prev => {
+                const newCycle = prev + 1;
+                if (newCycle >= totalCycles) {
+                  setIsComplete(true);
+                  setIsActive(false);
+                  return prev;
+                }
+                return newCycle;
+              });
+              break;
+          }
+          phaseTime = 0;
+        }
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isActive, isComplete]);
+
+  const resetExercise = () => {
+    setIsActive(false);
+    setPhase('inhale');
+    setCycle(0);
+    setIsComplete(false);
+  };
+
+  const getPhaseText = () => {
+    switch (phase) {
+      case 'inhale': return 'Nefes Al';
+      case 'hold': return 'Tut';
+      case 'exhale': return 'Nefes Ver';
+      case 'pause': return 'Bekle';
+      default: return '';
+    }
+  };
+
+  const getPhaseColor = () => {
+    switch (phase) {
+      case 'inhale': return 'from-blue-400 to-cyan-400';
+      case 'hold': return 'from-green-400 to-emerald-400';
+      case 'exhale': return 'from-orange-400 to-red-400';
+      case 'pause': return 'from-purple-400 to-indigo-400';
+      default: return 'from-gray-400 to-gray-600';
+    }
+  };
+
+  return (
+    <div className="text-center">
+      {/* Breathing Circle */}
+      <motion.div 
+        className="relative mb-12"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="relative w-96 h-96 mx-auto">
+          {/* Outer Glow */}
+          <motion.div
+            className={`absolute inset-0 rounded-full bg-gradient-to-br ${getPhaseColor()} blur-2xl opacity-30`}
+            animate={{
+              scale: phase === 'inhale' ? [1, 1.3, 1] : 
+                     phase === 'hold' ? 1.3 : 
+                     phase === 'exhale' ? [1.3, 1, 0.8] : 
+                     [0.8, 1],
+            }}
+            transition={{
+              duration: phase === 'inhale' ? 4 : 
+                       phase === 'hold' ? 4 : 
+                       phase === 'exhale' ? 6 : 2,
+              ease: phase === 'inhale' ? "easeOut" : 
+                    phase === 'exhale' ? "easeIn" : "linear"
+            }}
+          />
+
+          {/* Background Circle */}
+          <motion.div
+            className={`w-full h-full rounded-full bg-gradient-to-br ${getPhaseColor()} opacity-20 border-2 border-white/10`}
+            animate={{
+              scale: phase === 'inhale' ? [1, 1.2, 1] : 
+                     phase === 'hold' ? 1.2 : 
+                     phase === 'exhale' ? [1.2, 1, 0.8] : 
+                     [0.8, 1],
+            }}
+            transition={{
+              duration: phase === 'inhale' ? 4 : 
+                       phase === 'hold' ? 4 : 
+                       phase === 'exhale' ? 6 : 2,
+              ease: phase === 'inhale' ? "easeOut" : 
+                    phase === 'exhale' ? "easeIn" : "linear"
+            }}
+          />
+
+          {/* Breathing Circle */}
+          <motion.div
+            className={`absolute inset-12 rounded-full bg-gradient-to-br ${getPhaseColor()} shadow-2xl border-2 border-white/20`}
+            animate={{
+              scale: phase === 'inhale' ? [1, 1.3, 1] : 
+                     phase === 'hold' ? 1.3 : 
+                     phase === 'exhale' ? [1.3, 1, 0.7] : 
+                     [0.7, 1],
+            }}
+            transition={{
+              duration: phase === 'inhale' ? 4 : 
+                       phase === 'hold' ? 4 : 
+                       phase === 'exhale' ? 6 : 2,
+              ease: phase === 'inhale' ? "easeOut" : 
+                    phase === 'exhale' ? "easeIn" : "linear"
+            }}
+            style={{
+              filter: "drop-shadow(0 0 20px currentColor)"
+            }}
+          />
+
+          {/* Center Content */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+            <motion.div 
+              className="text-5xl font-bold text-white mb-4"
+              key={phase}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                textShadow: "0 0 30px rgba(255,255,255,0.5)"
+              }}
+            >
+              {getPhaseText()}
+            </motion.div>
+            
+            <motion.div 
+              className="text-xl text-white/90 font-medium px-4 py-2 rounded-full backdrop-blur-sm bg-white/10 border border-white/20"
+              key={`cycle-${cycle}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              Döngü {cycle + 1}/{totalCycles}
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Controls */}
+      <motion.div 
+        className="flex justify-center space-x-4 mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        {!isComplete ? (
+          <motion.button
+            onClick={() => setIsActive(!isActive)}
+            className={`w-16 h-16 rounded-full flex items-center justify-center text-white shadow-lg ${
+              isActive 
+                ? "bg-red-500 hover:bg-red-600" 
+                : "bg-green-500 hover:bg-green-600"
+            }`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            {isActive ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+          </motion.button>
+        ) : (
+          <motion.button
+            onClick={resetExercise}
+            className="w-16 h-16 rounded-full bg-purple-500 hover:bg-purple-600 flex items-center justify-center text-white shadow-lg"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <RotateCcw className="w-6 h-6" />
+          </motion.button>
+        )}
+
+        <motion.button
+          onClick={resetExercise}
+          className="w-16 h-16 rounded-full bg-gray-600 hover:bg-gray-700 flex items-center justify-center text-white shadow-lg"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <RotateCcw className="w-6 h-6" />
+        </motion.button>
+      </motion.div>
+
+      {/* Instructions */}
+      <motion.div 
+        className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 max-w-lg mx-auto border border-white/10 shadow-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <div className="flex items-center justify-center space-x-3 mb-6">
+          <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
+            <Wind className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-white font-semibold text-lg">Nefes Egzersizi</span>
+        </div>
+        
+        <div className="space-y-4">
+          <motion.div 
+            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
+              <span className="text-blue-400 font-bold">1</span>
+            </div>
+            <span className="text-white/90 font-medium">4 saniye nefes al</span>
+          </motion.div>
+          
+          <motion.div 
+            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+              <span className="text-green-400 font-bold">2</span>
+            </div>
+            <span className="text-white/90 font-medium">4 saniye tut</span>
+          </motion.div>
+          
+          <motion.div 
+            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="w-8 h-8 bg-orange-500/20 rounded-full flex items-center justify-center">
+              <span className="text-orange-400 font-bold">3</span>
+            </div>
+            <span className="text-white/90 font-medium">6 saniye nefes ver</span>
+          </motion.div>
+          
+          <motion.div 
+            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.9 }}
+          >
+            <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
+              <span className="text-purple-400 font-bold">4</span>
+            </div>
+            <span className="text-white/90 font-medium">2 saniye bekle</span>
+          </motion.div>
+          
+          <motion.div 
+            className="text-center mt-6 p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-400/20"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0 }}
+          >
+            <p className="text-cyan-300 font-semibold">
+              Bu döngüyü {totalCycles} kez tekrarla
+            </p>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Completion Message */}
+      <AnimatePresence>
+        {isComplete && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+          >
+            <motion.div 
+              className="bg-white rounded-2xl p-8 text-center max-w-sm mx-4"
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <motion.div
+                className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+              >
+                <Wind className="w-8 h-8 text-white" />
+              </motion.div>
+              
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Tebrikler! 🎉
+              </h3>
+              <p className="text-gray-600">
+                Nefes egzersizini başarıyla tamamladınız. 
+                Kendinizi daha sakin ve odaklanmış hissediyor musunuz?
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
