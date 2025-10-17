@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, RotateCcw, Wind } from "lucide-react";
+import { Play, Pause, RotateCcw, Wind, Sparkles } from "lucide-react";
 
 export function BreathingExercise() {
   const [isActive, setIsActive] = useState(false);
@@ -140,7 +140,7 @@ export function BreathingExercise() {
             }}
           />
 
-          {/* Breathing Circle */}
+          {/* Magical Breathing Circle */}
           <motion.div
             className={`absolute inset-12 rounded-full bg-gradient-to-br ${getPhaseColor()} shadow-2xl border-2 border-white/20`}
             animate={{
@@ -157,9 +157,49 @@ export function BreathingExercise() {
                     phase === 'exhale' ? "easeIn" : "linear"
             }}
             style={{
-              filter: "drop-shadow(0 0 20px currentColor)"
+              filter: "drop-shadow(0 0 30px currentColor)"
             }}
-          />
+          >
+            {/* Magical Inner Glow */}
+            <motion.div
+              className="absolute inset-4 rounded-full bg-white/20"
+              animate={{
+                opacity: [0.2, 0.6, 0.2],
+                scale: [0.8, 1.1, 0.8],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+
+            {/* Floating Energy Particles */}
+            {Array.from({ length: 8 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full"
+                style={{
+                  left: "50%",
+                  top: "50%",
+                  transformOrigin: "0 0",
+                }}
+                animate={{
+                  rotate: [0, 360],
+                  x: [0, 40 * Math.cos((i * 45) * Math.PI / 180)],
+                  y: [0, 40 * Math.sin((i * 45) * Math.PI / 180)],
+                  opacity: [0, 1, 0],
+                  scale: [0, 1, 0],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </motion.div>
 
           {/* Center Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
@@ -306,7 +346,7 @@ export function BreathingExercise() {
         </div>
       </motion.div>
 
-      {/* Completion Message */}
+      {/* Magical Completion Message */}
       <AnimatePresence>
         {isComplete && (
           <motion.div
@@ -315,28 +355,113 @@ export function BreathingExercise() {
             exit={{ opacity: 0, scale: 0.8 }}
             className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
           >
+            {/* Magical Background Effects */}
+            {Array.from({ length: 20 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-2 h-2 bg-white rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  scale: [0, 1, 0],
+                  opacity: [0, 1, 0],
+                  y: [0, -50, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                  ease: "easeOut",
+                }}
+              />
+            ))}
+
             <motion.div 
-              className="bg-white rounded-2xl p-8 text-center max-w-sm mx-4"
+              className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 text-center max-w-sm mx-4 shadow-2xl border border-white/20 relative overflow-hidden"
               initial={{ y: 50 }}
               animate={{ y: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
+              {/* Magical Background Shimmer */}
               <motion.div
-                className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                animate={{
+                  x: ["-100%", "100%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+
+              <motion.div
+                className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 relative"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
               >
-                <Wind className="w-8 h-8 text-white" />
+                {/* Magical Glow Effect */}
+                <motion.div
+                  className="absolute inset-0 bg-green-400 rounded-full blur-xl"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.5, 0.8, 0.5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                <Wind className="w-10 h-10 text-white relative z-10" />
               </motion.div>
               
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
-                Tebrikler! 🎉
-              </h3>
-              <p className="text-gray-600">
-                Nefes egzersizini başarıyla tamamladınız. 
+              <motion.h3 
+                className="text-2xl font-bold text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                🎉 Tebrikler! 🎉
+              </motion.h3>
+              
+              <motion.p 
+                className="text-gray-600 leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                Nefes egzersizini başarıyla tamamladınız! 
                 Kendinizi daha sakin ve odaklanmış hissediyor musunuz?
-              </p>
+              </motion.p>
+
+              {/* Magical Sparkles */}
+              {Array.from({ length: 6 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute text-2xl"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${20 + (i % 2) * 60}%`,
+                  }}
+                  animate={{
+                    scale: [0, 1, 0],
+                    rotate: [0, 180, 360],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: i * 0.3,
+                    ease: "easeInOut",
+                  }}
+                >
+                  ✨
+                </motion.div>
+              ))}
             </motion.div>
           </motion.div>
         )}

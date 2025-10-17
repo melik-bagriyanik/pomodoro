@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, RotateCcw, Coffee, CheckCircle } from "lucide-react";
+import { Play, Pause, RotateCcw, Coffee, CheckCircle, Sparkles } from "lucide-react";
 import { ProgressBar } from "./ProgressBar";
+import { MagicProgressBar } from "./MagicProgressBar";
 
 interface PomodoroTimerProps {
   onSessionComplete: () => void;
@@ -91,21 +92,50 @@ export function PomodoroTimer({ onSessionComplete, isActive, setIsActive }: Pomo
         transition={{ duration: 0.5 }}
       >
         <div className="relative w-72 h-72 sm:w-96 sm:h-96 mx-auto">
-          {/* Outer Glow Ring */}
+          {/* Magical Outer Glow Ring */}
           <motion.div
             className={`absolute inset-0 rounded-full ${
-              isBreak ? "bg-green-500/20" : "bg-orange-500/20"
-            } blur-xl`}
+              isBreak ? "bg-green-500/30" : "bg-orange-500/30"
+            } blur-2xl`}
             animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.3, 0.6, 0.3]
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.8, 0.3],
+              rotate: [0, 360],
             }}
             transition={{
-              duration: 2,
+              duration: 3,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           />
+
+          {/* Magical Energy Particles */}
+          {Array.from({ length: 12 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className={`absolute w-1 h-1 rounded-full ${
+                isBreak ? "bg-green-400" : "bg-orange-400"
+              }`}
+              style={{
+                left: "50%",
+                top: "50%",
+                transformOrigin: "0 0",
+              }}
+              animate={{
+                rotate: [0, 360],
+                x: [0, 60 * Math.cos((i * 30) * Math.PI / 180)],
+                y: [0, 60 * Math.sin((i * 30) * Math.PI / 180)],
+                opacity: [0, 1, 0],
+                scale: [0, 1, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.1,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
           
           {/* Progress Ring */}
           <svg className="w-full h-full transform -rotate-90 relative z-10" viewBox="0 0 100 100">
@@ -141,16 +171,31 @@ export function PomodoroTimer({ onSessionComplete, isActive, setIsActive }: Pomo
           {/* Timer Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
             <motion.div 
-              className="text-5xl sm:text-7xl font-bold text-white mb-3 sm:mb-4 tracking-tight"
+              className="text-5xl sm:text-7xl font-bold text-white mb-3 sm:mb-4 tracking-tight relative"
               key={timeLeft}
               initial={{ scale: 1.1, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.3 }}
               style={{
-                textShadow: "0 0 30px rgba(255,255,255,0.3)"
+                textShadow: "0 0 30px rgba(255,255,255,0.5)"
               }}
             >
               {formatTime(timeLeft)}
+              
+              {/* Magical Text Glow */}
+              <motion.div
+                className="absolute inset-0 text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text"
+                animate={{
+                  opacity: [0.3, 0.8, 0.3],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {formatTime(timeLeft)}
+              </motion.div>
             </motion.div>
             
             <motion.div 
@@ -274,20 +319,15 @@ export function PomodoroTimer({ onSessionComplete, isActive, setIsActive }: Pomo
           ))}
         </div>
         
-        {/* Progress Bar */}
+        {/* Magical Progress Bar */}
         <motion.div className="mt-6">
-          <div className="flex justify-between text-sm text-white/60 mb-2">
-            <span>İlerleme</span>
-            <span>{Math.round((completedPomodoros / 4) * 100)}%</span>
-          </div>
-          <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${(completedPomodoros / 4) * 100}%` }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            />
-          </div>
+          <MagicProgressBar
+            progress={(completedPomodoros / 4) * 100}
+            label="İlerleme"
+            showPercentage={true}
+            animated={true}
+            color="green"
+          />
         </motion.div>
       </motion.div>
     </div>
