@@ -51,44 +51,44 @@ export default function Home() {
       <motion.header 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 p-6"
+        className="relative z-10 p-4 sm:p-6"
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
           <motion.div 
-            className="flex items-center space-x-4"
+            className="flex items-center space-x-3 sm:space-x-4"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
             <motion.div 
-              className="w-12 h-12 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-2xl"
+              className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-2xl"
               whileHover={{ rotate: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <Brain className="w-7 h-7 text-white" />
+              <Brain className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
             </motion.div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent">
                 FocusFlow
               </h1>
-              <p className="text-purple-200/80 text-sm font-medium">Üretkenlik ve Zihin Aracı</p>
+              <p className="text-purple-200/80 text-xs sm:text-sm font-medium">Üretkenlik ve Zihin Aracı</p>
             </div>
           </motion.div>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-3 sm:space-x-6">
             <motion.div 
-              className="text-center bg-white/5 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10"
+              className="text-center bg-white/5 backdrop-blur-sm rounded-2xl px-3 py-2 sm:px-4 sm:py-3 border border-white/10"
               whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="text-2xl font-bold text-white">{sessionCount}</div>
+              <div className="text-xl sm:text-2xl font-bold text-white">{sessionCount}</div>
               <div className="text-xs text-purple-200/70 font-medium">Oturum</div>
             </motion.div>
             <motion.div 
-              className="text-center bg-white/5 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10"
+              className="text-center bg-white/5 backdrop-blur-sm rounded-2xl px-3 py-2 sm:px-4 sm:py-3 border border-white/10"
               whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="text-2xl font-bold text-white">{Math.floor(totalFocusTime / 60)}</div>
+              <div className="text-xl sm:text-2xl font-bold text-white">{Math.floor(totalFocusTime / 60)}</div>
               <div className="text-xs text-purple-200/70 font-medium">Dakika</div>
             </motion.div>
           </div>
@@ -100,15 +100,15 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="relative z-10 px-6 mb-8"
+        className="relative z-10 px-4 sm:px-6 mb-6 sm:mb-8"
       >
         <div className="max-w-5xl mx-auto">
-          <div className="flex justify-center space-x-3 bg-white/5 backdrop-blur-xl rounded-3xl p-3 border border-white/10 shadow-2xl">
+          <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-3 bg-white/5 backdrop-blur-xl rounded-3xl p-2 sm:p-3 border border-white/10 shadow-2xl">
             {modes.map((mode, index) => (
               <motion.button
                 key={mode.id}
                 onClick={() => setCurrentMode(mode.id as AppMode)}
-                className={`flex items-center space-x-3 px-8 py-4 rounded-2xl transition-all duration-500 relative overflow-hidden ${
+                className={`flex items-center justify-center space-x-2 sm:space-x-3 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-500 relative overflow-hidden min-h-[48px] ${
                   currentMode === mode.id
                     ? "bg-white text-gray-900 shadow-xl scale-105"
                     : "text-white hover:bg-white/10 hover:scale-105"
@@ -126,10 +126,10 @@ export default function Home() {
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
-                <mode.icon className={`w-5 h-5 relative z-10 ${
+                <mode.icon className={`w-4 h-4 sm:w-5 sm:h-5 relative z-10 ${
                   currentMode === mode.id ? "text-gray-900" : "text-white"
                 }`} />
-                <span className={`font-semibold relative z-10 ${
+                <span className={`font-semibold text-sm sm:text-base relative z-10 ${
                   currentMode === mode.id ? "text-gray-900" : "text-white"
                 }`}>
                   {mode.label}
@@ -145,7 +145,7 @@ export default function Home() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4 }}
-        className="relative z-10 px-6"
+        className="relative z-10 px-4 sm:px-6"
       >
         <div className="max-w-4xl mx-auto">
           <AnimatePresence mode="wait">
@@ -197,13 +197,13 @@ export default function Home() {
 
       {/* Floating Action Button */}
       <motion.div 
-        className="fixed bottom-8 right-8 z-20"
+        className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-20"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.6 }}
       >
         <motion.button
-          className="w-16 h-16 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 rounded-2xl shadow-2xl flex items-center justify-center text-white border border-white/20 backdrop-blur-sm"
+          className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 rounded-2xl shadow-2xl flex items-center justify-center text-white border border-white/20 backdrop-blur-sm"
           whileHover={{ 
             scale: 1.1,
             boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)"
@@ -220,7 +220,7 @@ export default function Home() {
             animate={{ rotate: isActive ? 180 : 0 }}
             transition={{ duration: 0.3 }}
           >
-            {isActive ? <Pause className="w-7 h-7" /> : <Play className="w-7 h-7" />}
+            {isActive ? <Pause className="w-6 h-6 sm:w-7 sm:h-7" /> : <Play className="w-6 h-6 sm:w-7 sm:h-7" />}
           </motion.div>
         </motion.button>
       </motion.div>

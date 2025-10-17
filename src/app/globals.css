@@ -69,3 +69,44 @@ a {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  /* Improve touch targets */
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better spacing for mobile */
+  .space-y-8 > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  /* Optimize text sizes for mobile */
+  .text-7xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+  
+  .text-5xl {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+  
+  /* Improve button spacing */
+  .flex.space-x-6 > * + * {
+    margin-left: 1rem;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  button:hover {
+    transform: none;
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+}

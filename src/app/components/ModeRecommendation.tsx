@@ -113,7 +113,7 @@ export function ModeRecommendation({ sessionCount, totalFocusTime }: ModeRecomme
     <div className="space-y-8">
       {/* Main Recommendation */}
       <motion.div
-        className="bg-white/5 backdrop-blur-xl rounded-3xl p-10 text-center border border-white/10 shadow-2xl relative overflow-hidden"
+        className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 sm:p-10 text-center border border-white/10 shadow-2xl relative overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -133,17 +133,17 @@ export function ModeRecommendation({ sessionCount, totalFocusTime }: ModeRecomme
         />
         
         <motion.div
-          className={`w-24 h-24 mx-auto mb-8 rounded-3xl bg-gradient-to-br ${recommendation.color} flex items-center justify-center shadow-2xl relative z-10`}
+          className={`w-16 h-16 sm:w-24 sm:h-24 mx-auto mb-6 sm:mb-8 rounded-3xl bg-gradient-to-br ${recommendation.color} flex items-center justify-center shadow-2xl relative z-10`}
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 20 }}
           whileHover={{ scale: 1.1, rotate: 5 }}
         >
-          <IconComponent className="w-12 h-12 text-white" />
+          <IconComponent className="w-8 h-8 sm:w-12 sm:h-12 text-white" />
         </motion.div>
 
         <motion.h2 
-          className="text-3xl font-bold text-white mb-6 relative z-10"
+          className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -155,7 +155,7 @@ export function ModeRecommendation({ sessionCount, totalFocusTime }: ModeRecomme
         </motion.h2>
 
         <motion.p 
-          className="text-white/90 text-xl mb-8 leading-relaxed relative z-10"
+          className="text-white/90 text-lg sm:text-xl mb-6 sm:mb-8 leading-relaxed relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -164,7 +164,7 @@ export function ModeRecommendation({ sessionCount, totalFocusTime }: ModeRecomme
         </motion.p>
 
         <motion.button
-          className={`px-10 py-5 rounded-2xl bg-gradient-to-r ${recommendation.color} text-white font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 border border-white/20 relative z-10`}
+          className={`px-6 sm:px-10 py-3 sm:py-5 rounded-2xl bg-gradient-to-r ${recommendation.color} text-white font-bold text-base sm:text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 border border-white/20 relative z-10`}
           whileHover={{ 
             scale: 1.05,
             boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
@@ -180,7 +180,7 @@ export function ModeRecommendation({ sessionCount, totalFocusTime }: ModeRecomme
 
       {/* Stats Grid */}
       <motion.div 
-        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
@@ -188,7 +188,7 @@ export function ModeRecommendation({ sessionCount, totalFocusTime }: ModeRecomme
         {stats.map((stat, index) => (
           <motion.div
             key={stat.label}
-            className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 text-center border border-white/10 shadow-xl relative overflow-hidden"
+            className="bg-white/5 backdrop-blur-xl rounded-2xl p-4 sm:p-8 text-center border border-white/10 shadow-xl relative overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 + index * 0.1 }}
@@ -205,71 +205,71 @@ export function ModeRecommendation({ sessionCount, totalFocusTime }: ModeRecomme
             />
             
             <motion.div
-              className={`w-12 h-12 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${stat.color.replace('text-', 'from-').replace('-400', '-500')} flex items-center justify-center shadow-lg`}
+              className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 rounded-2xl bg-gradient-to-br ${stat.color.replace('text-', 'from-').replace('-400', '-500')} flex items-center justify-center shadow-lg`}
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <stat.icon className="w-6 h-6 text-white" />
+              <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </motion.div>
             
-            <div className="text-3xl font-bold text-white mb-2 relative z-10">{stat.value}</div>
-            <div className="text-white/70 font-medium relative z-10">{stat.label}</div>
+            <div className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2 relative z-10">{stat.value}</div>
+            <div className="text-white/70 font-medium text-sm sm:text-base relative z-10">{stat.label}</div>
           </motion.div>
         ))}
       </motion.div>
 
       {/* Tips Section */}
       <motion.div
-        className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl"
+        className="bg-white/5 backdrop-blur-xl rounded-3xl p-4 sm:p-8 border border-white/10 shadow-2xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-            <Brain className="w-5 h-5 text-white" />
+        <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+            <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-white">Günlük İpuçları</h3>
+          <h3 className="text-xl sm:text-2xl font-bold text-white">Günlük İpuçları</h3>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <motion.div 
-            className="flex items-start space-x-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
+            className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.9 }}
             whileHover={{ scale: 1.02 }}
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <span className="text-white font-bold text-sm">1</span>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span className="text-white font-bold text-xs sm:text-sm">1</span>
             </div>
-            <p className="text-white/90 font-medium leading-relaxed">Her 25 dakikalık çalışmadan sonra 5 dakika mola verin</p>
+            <p className="text-white/90 font-medium leading-relaxed text-sm sm:text-base">Her 25 dakikalık çalışmadan sonra 5 dakika mola verin</p>
           </motion.div>
           
           <motion.div 
-            className="flex items-start space-x-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
+            className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.0 }}
             whileHover={{ scale: 1.02 }}
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <span className="text-white font-bold text-sm">2</span>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span className="text-white font-bold text-xs sm:text-sm">2</span>
             </div>
-            <p className="text-white/90 font-medium leading-relaxed">4 pomodoro oturumundan sonra 15-30 dakika uzun mola yapın</p>
+            <p className="text-white/90 font-medium leading-relaxed text-sm sm:text-base">4 pomodoro oturumundan sonra 15-30 dakika uzun mola yapın</p>
           </motion.div>
           
           <motion.div 
-            className="flex items-start space-x-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
+            className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.1 }}
             whileHover={{ scale: 1.02 }}
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <span className="text-white font-bold text-sm">3</span>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span className="text-white font-bold text-xs sm:text-sm">3</span>
             </div>
-            <p className="text-white/90 font-medium leading-relaxed">Nefes egzersizleri stres seviyenizi düşürür ve odaklanmanızı artırır</p>
+            <p className="text-white/90 font-medium leading-relaxed text-sm sm:text-base">Nefes egzersizleri stres seviyenizi düşürür ve odaklanmanızı artırır</p>
           </motion.div>
         </div>
       </motion.div>

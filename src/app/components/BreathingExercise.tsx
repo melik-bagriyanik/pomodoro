@@ -98,12 +98,12 @@ export function BreathingExercise() {
     <div className="text-center">
       {/* Breathing Circle */}
       <motion.div 
-        className="relative mb-12"
+        className="relative mb-8 sm:mb-12"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="relative w-96 h-96 mx-auto">
+        <div className="relative w-72 h-72 sm:w-96 sm:h-96 mx-auto">
           {/* Outer Glow */}
           <motion.div
             className={`absolute inset-0 rounded-full bg-gradient-to-br ${getPhaseColor()} blur-2xl opacity-30`}
@@ -164,7 +164,7 @@ export function BreathingExercise() {
           {/* Center Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
             <motion.div 
-              className="text-5xl font-bold text-white mb-4"
+              className="text-3xl sm:text-5xl font-bold text-white mb-3 sm:mb-4"
               key={phase}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -177,7 +177,7 @@ export function BreathingExercise() {
             </motion.div>
             
             <motion.div 
-              className="text-xl text-white/90 font-medium px-4 py-2 rounded-full backdrop-blur-sm bg-white/10 border border-white/20"
+              className="text-lg sm:text-xl text-white/90 font-medium px-3 sm:px-4 py-2 rounded-full backdrop-blur-sm bg-white/10 border border-white/20"
               key={`cycle-${cycle}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -191,7 +191,7 @@ export function BreathingExercise() {
 
       {/* Controls */}
       <motion.div 
-        className="flex justify-center space-x-4 mb-8"
+        className="flex justify-center space-x-3 sm:space-x-4 mb-6 sm:mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
@@ -199,7 +199,7 @@ export function BreathingExercise() {
         {!isComplete ? (
           <motion.button
             onClick={() => setIsActive(!isActive)}
-            className={`w-16 h-16 rounded-full flex items-center justify-center text-white shadow-lg ${
+            className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-white shadow-lg ${
               isActive 
                 ? "bg-red-500 hover:bg-red-600" 
                 : "bg-green-500 hover:bg-green-600"
@@ -207,99 +207,99 @@ export function BreathingExercise() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            {isActive ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+            {isActive ? <Pause className="w-5 h-5 sm:w-6 sm:h-6" /> : <Play className="w-5 h-5 sm:w-6 sm:h-6" />}
           </motion.button>
         ) : (
           <motion.button
             onClick={resetExercise}
-            className="w-16 h-16 rounded-full bg-purple-500 hover:bg-purple-600 flex items-center justify-center text-white shadow-lg"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-purple-500 hover:bg-purple-600 flex items-center justify-center text-white shadow-lg"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <RotateCcw className="w-6 h-6" />
+            <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />
           </motion.button>
         )}
 
         <motion.button
           onClick={resetExercise}
-          className="w-16 h-16 rounded-full bg-gray-600 hover:bg-gray-700 flex items-center justify-center text-white shadow-lg"
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-600 hover:bg-gray-700 flex items-center justify-center text-white shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <RotateCcw className="w-6 h-6" />
+          <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />
         </motion.button>
       </motion.div>
 
       {/* Instructions */}
       <motion.div 
-        className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 max-w-lg mx-auto border border-white/10 shadow-2xl"
+        className="bg-white/5 backdrop-blur-xl rounded-3xl p-4 sm:p-8 max-w-lg mx-auto border border-white/10 shadow-2xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
-        <div className="flex items-center justify-center space-x-3 mb-6">
-          <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
-            <Wind className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-center space-x-3 mb-4 sm:mb-6">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
+            <Wind className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
-          <span className="text-white font-semibold text-lg">Nefes Egzersizi</span>
+          <span className="text-white font-semibold text-base sm:text-lg">Nefes Egzersizi</span>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <motion.div 
-            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            className="flex items-center space-x-3 p-2 sm:p-3 rounded-xl bg-white/5 border border-white/10"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
-              <span className="text-blue-400 font-bold">1</span>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
+              <span className="text-blue-400 font-bold text-sm sm:text-base">1</span>
             </div>
-            <span className="text-white/90 font-medium">4 saniye nefes al</span>
+            <span className="text-white/90 font-medium text-sm sm:text-base">4 saniye nefes al</span>
           </motion.div>
           
           <motion.div 
-            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            className="flex items-center space-x-3 p-2 sm:p-3 rounded-xl bg-white/5 border border-white/10"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7 }}
           >
-            <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
-              <span className="text-green-400 font-bold">2</span>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+              <span className="text-green-400 font-bold text-sm sm:text-base">2</span>
             </div>
-            <span className="text-white/90 font-medium">4 saniye tut</span>
+            <span className="text-white/90 font-medium text-sm sm:text-base">4 saniye tut</span>
           </motion.div>
           
           <motion.div 
-            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            className="flex items-center space-x-3 p-2 sm:p-3 rounded-xl bg-white/5 border border-white/10"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.8 }}
           >
-            <div className="w-8 h-8 bg-orange-500/20 rounded-full flex items-center justify-center">
-              <span className="text-orange-400 font-bold">3</span>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-500/20 rounded-full flex items-center justify-center">
+              <span className="text-orange-400 font-bold text-sm sm:text-base">3</span>
             </div>
-            <span className="text-white/90 font-medium">6 saniye nefes ver</span>
+            <span className="text-white/90 font-medium text-sm sm:text-base">6 saniye nefes ver</span>
           </motion.div>
           
           <motion.div 
-            className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10"
+            className="flex items-center space-x-3 p-2 sm:p-3 rounded-xl bg-white/5 border border-white/10"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.9 }}
           >
-            <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
-              <span className="text-purple-400 font-bold">4</span>
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
+              <span className="text-purple-400 font-bold text-sm sm:text-base">4</span>
             </div>
-            <span className="text-white/90 font-medium">2 saniye bekle</span>
+            <span className="text-white/90 font-medium text-sm sm:text-base">2 saniye bekle</span>
           </motion.div>
           
           <motion.div 
-            className="text-center mt-6 p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-400/20"
+            className="text-center mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-400/20"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0 }}
           >
-            <p className="text-cyan-300 font-semibold">
+            <p className="text-cyan-300 font-semibold text-sm sm:text-base">
               Bu döngüyü {totalCycles} kez tekrarla
             </p>
           </motion.div>

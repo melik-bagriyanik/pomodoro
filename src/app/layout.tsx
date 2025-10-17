@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "FocusFlow - Üretkenlik ve Zihin Aracı",
   description: "Odaklanma, nefes egzersizleri ve pomodoro zamanlayıcı ile üretkenliğinizi artırın",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 };
 
 export default function RootLayout({
