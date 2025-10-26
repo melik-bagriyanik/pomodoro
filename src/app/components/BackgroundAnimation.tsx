@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Particles from "react-particles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
@@ -30,9 +30,44 @@ interface BackgroundAnimationProps {
 }
 
 export function BackgroundAnimation({ theme }: BackgroundAnimationProps) {
+  const [starPositions, setStarPositions] = useState<Array<{
+    left: number;
+    top: number;
+    duration: number;
+    delay: number;
+  }>>([]);
+  
+  const [shootingStarPositions, setShootingStarPositions] = useState<Array<{
+    left: number;
+    top: number;
+    delay: number;
+  }>>([]);
+
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSlim(engine);
   }, []);
+
+  // Generate random positions on client side only
+  useEffect(() => {
+    if (theme.name === "uzay") {
+      setStarPositions(
+        Array.from({ length: 20 }).map(() => ({
+          left: Math.random() * 100,
+          top: Math.random() * 100,
+          duration: 2 + Math.random() * 3,
+          delay: Math.random() * 2,
+        }))
+      );
+      
+      setShootingStarPositions(
+        Array.from({ length: 3 }).map(() => ({
+          left: Math.random() * 100,
+          top: Math.random() * 100,
+          delay: Math.random() * 5,
+        }))
+      );
+    }
+  }, [theme.name]);
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -133,31 +168,31 @@ export function BackgroundAnimation({ theme }: BackgroundAnimationProps) {
       {theme.name === "uzay" && (
         <>
           {/* Stars */}
-          {Array.from({ length: 20 }).map((_, i) => (
+          {starPositions.map((star, i) => (
             <div
               key={`star-${i}`}
               className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDuration: `${2 + Math.random() * 3}s`,
-                animationDelay: `${Math.random() * 2}s`,
-              }}
-            />
-          ))}
-          
+          style={{
+                left: `${star.left}%`,
+                top: `${star.top}%`,
+                animationDuration: `${star.duration}s`,
+                animationDelay: `${star.delay}s`,
+          }}
+        />
+      ))}
+
           {/* Shooting stars */}
-          {Array.from({ length: 3 }).map((_, i) => (
+          {shootingStarPositions.map((shootingStar, i) => (
             <div
               key={`shooting-star-${i}`}
               className="absolute w-20 h-px bg-gradient-to-r from-white to-transparent animate-shooting-star"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-              }}
-            />
-          ))}
+          style={{
+                left: `${shootingStar.left}%`,
+                top: `${shootingStar.top}%`,
+                animationDelay: `${shootingStar.delay}s`,
+          }}
+        />
+      ))}
         </>
       )}
     </div>

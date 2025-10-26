@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, RotateCcw, Brain, Timer, Wind, Settings } from "lucide-react";
+import { Play, Pause, RotateCcw, Brain, Timer, Wind, Settings, Heart } from "lucide-react";
 import { BreathingExercise } from "./components/BreathingExercise";
 import { PomodoroTimer } from "./components/PomodoroTimer";
 import { BackgroundAnimation } from "./components/BackgroundAnimation";
 import { ProgressBar } from "./components/ProgressBar";
-import { ModeRecommendation } from "./components/ModeRecommendation";
+import { RelaxationGames } from "./components/RelaxationGames";
 import { MagicToast, ToastType } from "./components/MagicToast";
 
-type AppMode = "pomodoro" | "breathing" | "focus";
+type AppMode = "pomodoro" | "breathing" | "relax";
 type Theme = "uzay" | "sıcak" | "soğuk" | "orman" | "yağmur";
 
 interface ThemeConfig {
@@ -171,7 +171,7 @@ export default function Home() {
   const modes = [
     { id: "pomodoro", label: "Pomodoro", icon: Timer, color: "from-red-500 to-orange-500" },
     { id: "breathing", label: "Nefes Egzersizi", icon: Wind, color: "from-blue-500 to-cyan-500" },
-    { id: "focus", label: "Odak Modu", icon: Brain, color: "from-purple-500 to-pink-500" }
+    { id: "relax", label: "Rahatla", icon: Heart, color: "from-pink-500 to-rose-500" }
   ];
 
 
@@ -285,23 +285,23 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10 px-4 sm:px-6 flex-1 flex items-start justify-center overflow-y-auto">
         <div className="max-w-4xl mx-auto w-full py-2">
-          <AnimatePresence mode="wait">
-            {currentMode === "pomodoro" && (
-              <motion.div
-                key="pomodoro"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <PomodoroTimer 
-                  onSessionComplete={handleSessionComplete}
-                  isActive={isActive}
-                  setIsActive={setIsActive}
-                />
-              </motion.div>
-            )}
+          {/* Pomodoro Timer - Always rendered but conditionally visible */}
+          <div className={currentMode === "pomodoro" ? "block" : "hidden"}>
+            <motion.div
+              key="pomodoro"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <PomodoroTimer 
+                onSessionComplete={handleSessionComplete}
+                isActive={isActive}
+                setIsActive={setIsActive}
+              />
+            </motion.div>
+          </div>
 
+          <AnimatePresence mode="wait">
             {currentMode === "breathing" && (
               <motion.div
                 key="breathing"
@@ -314,18 +314,15 @@ export default function Home() {
               </motion.div>
             )}
 
-            {currentMode === "focus" && (
+            {currentMode === "relax" && (
               <motion.div
-                key="focus"
+                key="relax"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
               >
-                <ModeRecommendation 
-                  sessionCount={sessionCount}
-                  totalFocusTime={totalFocusTime}
-                />
+                <RelaxationGames />
               </motion.div>
             )}
           </AnimatePresence>
