@@ -5,6 +5,7 @@ import Particles from "react-particles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
 import { ThemeConfig } from "../types/theme";
+import { Meteors } from "./ui/meteors";
 
 interface BackgroundAnimationProps {
   theme: ThemeConfig;
@@ -175,6 +176,11 @@ export function BackgroundAnimation({ theme }: BackgroundAnimationProps) {
         />
       ))}
         </>
+      )}
+
+      {/* Special effects for rain theme */}
+      {theme.name === "yağmur" && (
+        <Meteors number={20} />
       )}
     </div>
   );

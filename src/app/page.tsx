@@ -9,6 +9,7 @@ import { BackgroundAnimation } from "./components/BackgroundAnimation";
 import { RelaxationGames } from "./components/RelaxationGames";
 import { MagicToast, ToastType } from "./components/MagicToast";
 import { Theme, ThemeConfig, themes, getCurrentThemeConfig } from "./types/theme";
+import { BorderBeam } from "./components/ui/border-beam";
 
 type AppMode = "pomodoro" | "breathing" | "relax";
 
@@ -128,7 +129,7 @@ export default function Home() {
       {/* Mode Selection */}
       <div className="relative z-10 px-4 sm:px-6 mb-2 sm:mb-3 flex-shrink-0">
         <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col sm:flex-row justify-center space-y-1 sm:space-y-0 sm:space-x-2 backdrop-blur-xl rounded-2xl p-1 sm:p-2 border shadow-2xl bg-white/5 border-white/10">
+          <div className="relative flex flex-col sm:flex-row justify-center space-y-1 sm:space-y-0 sm:space-x-2 backdrop-blur-xl rounded-2xl p-1 sm:p-2 border shadow-2xl bg-white/5 border-white/10 overflow-hidden">
             {modes.map((mode) => {
               const Icon = mode.icon;
               return (
@@ -151,13 +152,20 @@ export default function Home() {
                 </motion.button>
               );
             })}
+            <BorderBeam 
+              size={300} 
+              duration={8} 
+              colorFrom="#3b82f6" 
+              colorTo="#8b5cf6"
+              borderWidth={1}
+            />
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <main className="relative z-10 px-4 sm:px-6 flex-1 flex items-start justify-center overflow-y-auto">
-        <div className="max-w-4xl mx-auto w-full py-2">
+        <div className="relative max-w-4xl mx-auto w-full py-2 overflow-hidden">
           {/* Pomodoro Timer - Always rendered but conditionally visible */}
           <div className={currentMode === "pomodoro" ? "block" : "hidden"}>
             <motion.div
@@ -199,6 +207,16 @@ export default function Home() {
               </motion.div>
             )}
           </AnimatePresence>
+          
+          {/* BorderBeam for main content */}
+          <BorderBeam 
+            size={400} 
+            duration={12} 
+            colorFrom="#10b981" 
+            colorTo="#3b82f6"
+            borderWidth={1.5}
+            delay={2}
+          />
         </div>
       </main>
 

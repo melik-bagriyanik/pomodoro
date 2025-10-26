@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, RotateCcw, Wind, Sparkles } from "lucide-react";
+import { BorderBeam } from "./ui/border-beam";
 
 export function BreathingExercise() {
   const [isActive, setIsActive] = useState(false);
@@ -238,7 +239,17 @@ export function BreathingExercise() {
       >
         {!isComplete ? (
           <motion.button
-            onClick={() => setIsActive(!isActive)}
+            onClick={() => {
+              // Play notification sound when starting breathing exercise
+              if (!isActive) {
+                const audio = new Audio('/voice/bright-notification-352449.mp3');
+                audio.volume = 0.4;
+                audio.play().catch(() => {
+                  // Ignore autoplay errors
+                });
+              }
+              setIsActive(!isActive);
+            }}
             className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-white shadow-lg ${
               isActive 
                 ? "bg-red-500 hover:bg-red-600" 
@@ -272,7 +283,7 @@ export function BreathingExercise() {
 
       {/* Instructions */}
       <motion.div 
-        className="bg-white/5 backdrop-blur-xl rounded-3xl p-4 sm:p-8 max-w-lg mx-auto border border-white/10 shadow-2xl"
+        className="relative bg-white/5 backdrop-blur-xl rounded-3xl p-4 sm:p-8 max-w-lg mx-auto border border-white/10 shadow-2xl overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
@@ -344,6 +355,16 @@ export function BreathingExercise() {
             </p>
           </motion.div>
         </div>
+        
+        {/* BorderBeam for breathing exercise */}
+        <BorderBeam 
+          size={250} 
+          duration={9} 
+          colorFrom="#06b6d4" 
+          colorTo="#3b82f6"
+          borderWidth={1.5}
+          delay={1.5}
+        />
       </motion.div>
 
       {/* Magical Completion Message */}

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, RotateCcw, Coffee, CheckCircle, Sparkles } from "lucide-react";
 import { ProgressBar } from "./ProgressBar";
 import { MagicProgressBar } from "./MagicProgressBar";
+import { BorderBeam } from "./ui/border-beam";
 
 interface PomodoroTimerProps {
   onSessionComplete: () => void;
@@ -273,7 +274,7 @@ export function PomodoroTimer({ onSessionComplete, isActive, setIsActive }: Pomo
 
       {/* Session Progress */}
       <motion.div 
-        className="bg-white/5 backdrop-blur-xl rounded-2xl p-3 sm:p-4 max-w-lg mx-auto border border-white/10 shadow-2xl"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl p-3 sm:p-4 max-w-lg mx-auto border border-white/10 shadow-2xl overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
@@ -339,6 +340,16 @@ export function PomodoroTimer({ onSessionComplete, isActive, setIsActive }: Pomo
             color="green"
           />
         </motion.div>
+        
+        {/* BorderBeam for Pomodoro Sessions */}
+        <BorderBeam 
+          size={200} 
+          duration={10} 
+          colorFrom="#f59e0b" 
+          colorTo="#10b981"
+          borderWidth={1}
+          delay={1}
+        />
       </motion.div>
     </div>
   );

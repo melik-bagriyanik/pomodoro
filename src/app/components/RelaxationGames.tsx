@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Play, RotateCcw, X } from "lucide-react";
 import confetti from "canvas-confetti";
+import { BorderBeam } from "./ui/border-beam";
 
 export type GameType = "waves" | "sand" | "bubbles";
 
@@ -359,7 +360,7 @@ export function RelaxationGames() {
 
         <div
           ref={canvasRef}
-          className="relative w-full h-96 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10"
+          className="relative w-full h-96 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 overflow-hidden"
           onClick={handleCanvasClick}
           onMouseMove={currentGame === "sand" ? handleSandMouseMove : undefined}
           style={{ 
@@ -521,6 +522,16 @@ export function RelaxationGames() {
             </div>
           )}
         </div>
+        
+        {/* BorderBeam for game container */}
+        <BorderBeam 
+          size={300} 
+          duration={8} 
+          colorFrom="#ec4899" 
+          colorTo="#8b5cf6"
+          borderWidth={1.5}
+          delay={0.5}
+        />
       </div>
     );
   }
