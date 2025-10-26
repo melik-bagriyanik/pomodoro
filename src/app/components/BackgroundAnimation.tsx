@@ -4,26 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import Particles from "react-particles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
-
-interface ThemeConfig {
-  name: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    background: string;
-    particles: string[];
-  };
-  particles: {
-    count: number;
-    speed: number;
-    size: { min: number; max: number };
-    links: {
-      distance: number;
-      opacity: number;
-    };
-  };
-}
+import { ThemeConfig } from "../types/theme";
 
 interface BackgroundAnimationProps {
   theme: ThemeConfig;
