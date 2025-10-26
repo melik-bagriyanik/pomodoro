@@ -223,7 +223,17 @@ export function PomodoroTimer({ onSessionComplete, isActive, setIsActive }: Pomo
         transition={{ delay: 0.3 }}
       >
         <motion.button
-          onClick={() => setIsActive(!isActive)}
+          onClick={() => {
+            // Play notification sound when starting timer
+            if (!isActive) {
+              const audio = new Audio('/voice/bright-notification-352449.mp3');
+              audio.volume = 0.4;
+              audio.play().catch(() => {
+                // Ignore autoplay errors
+              });
+            }
+            setIsActive(!isActive);
+          }}
           className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center text-white shadow-2xl backdrop-blur-sm border transition-all duration-300 ${
             isActive 
               ? "bg-gradient-to-br from-red-500 to-red-600 border-red-400/30 hover:from-red-600 hover:to-red-700" 

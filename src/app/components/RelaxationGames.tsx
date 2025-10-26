@@ -1,16 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Play, RotateCcw, X } from "lucide-react";
+import confetti from "canvas-confetti";
 
-export type GameType = "bubbles" | "waves" | "sand";
+export type GameType = "waves" | "sand" | "bubbles";
 
-interface Bubble {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  speed: number;
-}
 
 interface Wave {
   id: number;
@@ -28,6 +22,14 @@ interface SandPoint {
   size: number;
 }
 
+interface Bubble {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  speed: number;
+}
+
 interface Game {
   id: GameType;
   name: string;
@@ -36,12 +38,6 @@ interface Game {
 }
 
 const games: Game[] = [
-  {
-    id: "bubbles",
-    name: "Balonlar",
-    description: "Balonları patlatın ve rahatlayın",
-    icon: Play
-  },
   {
     id: "waves",
     name: "Dalgalar",
@@ -53,14 +49,20 @@ const games: Game[] = [
     name: "Kum",
     description: "Kum üzerinde çizim yapın",
     icon: Play
+  },
+  {
+    id: "bubbles",
+    name: "Balonlar",
+    description: "Balonlara tıkla ve patlat",
+    icon: Play
   }
 ];
 
 export function RelaxationGames() {
   const [currentGame, setCurrentGame] = useState<GameType | null>(null);
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
   const [waves, setWaves] = useState<Wave[]>([]);
   const [sandPoints, setSandPoints] = useState<SandPoint[]>([]);
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [ripples, setRipples] = useState<Array<{id: number, x: number, y: number}>>([]);
   const [sandAudio, setSandAudio] = useState<HTMLAudioElement | null>(null);
@@ -76,51 +78,11 @@ export function RelaxationGames() {
     setSandAudio(audio);
   }, []);
 
-  // Bubble game
-  useEffect(() => {
-    if (currentGame === "bubbles") {
-      const interval = setInterval(() => {
-        setBubbles(prev => {
-          const newBubble: Bubble = {
-            id: Date.now() + Math.random(),
-            x: Math.random() * 100,
-            y: Math.random() * 100,
-            size: Math.random() * 30 + 20,
-            speed: Math.random() * 0.5 + 0.2
-          };
-          return [...prev, newBubble];
-        });
-      }, 2000);
 
-      return () => clearInterval(interval);
-    }
-  }, [currentGame]);
-
-  const popBubble = (id: number, x: number, y: number) => {
-    setBubbles(prev => prev.filter(bubble => bubble.id !== id));
-    
-    // Play bubble pop sound
-    const playBubbleSound = () => {
-      const audio = new Audio('/voice/bubble-pop-293342.mp3');
-      audio.volume = 0.3;
-      audio.play().catch((error) => {
-        console.log('Bubble sound error:', error);
-      });
-    };
-    
-    playBubbleSound();
-    
-    // Cool ripple effect
-    const rippleId = Date.now() + Math.random();
-    setRipples(prev => [...prev, { id: rippleId, x, y }]);
-    
-    // Remove ripple after animation
-    setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== rippleId));
-    }, 600);
-  };
 
   const createWave = (x: number, y: number) => {
+    console.log('Creating wave at:', x, y);
+    
     // Play water sound from file
     const playWaterSound = () => {
       const audio = new Audio('/voice/water-drip-45622.mp3');
@@ -137,11 +99,57 @@ export function RelaxationGames() {
       x,
       y,
       radius: 0,
-      maxRadius: 100,
-      speed: 2
+      maxRadius: 120, // Biraz daha küçük maksimum radius
+      speed: 1.2 // Daha yavaş büyüme hızı
     };
     
-    setWaves(prev => [...prev, newWave]);
+    console.log('New wave created:', newWave);
+    setWaves(prev => {
+      const updated = [...prev, newWave];
+      console.log('Total waves:', updated.length);
+      return updated;
+    });
+  };
+
+  const createBubble = () => {
+    const newBubble: Bubble = {
+      id: Date.now() + Math.random(),
+      x: Math.random() * 350 + 30,
+      y: 400,
+      size: Math.random() * 40 + 30,
+      speed: Math.random() * 1 + 0.5
+    };
+    setBubbles(prev => [...prev, newBubble]);
+  };
+
+  const popBubble = (id: number, x: number, y: number) => {
+    setBubbles(prev => prev.filter(b => b.id !== id));
+    
+    // Play pop sound
+    const audio = new Audio('/voice/bubble-pop-293342.mp3');
+    audio.volume = 0.4;
+    audio.play().catch(() => {});
+    
+    // Trigger confetti at the exact clicked position
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (rect) {
+      // Use the exact mouse coordinates relative to viewport
+      const confettiX = x / window.innerWidth;
+      const confettiY = y / window.innerHeight;
+      
+      // Create colorful confetti burst at exact position
+      confetti({
+        particleCount: 25,
+        spread: 60,
+        origin: { x: confettiX, y: confettiY },
+        colors: ['#FFE400', '#FFBD00', '#E89400', '#FFCA6C', '#FDFFB8', '#60a5fa', '#a25afd', '#ff5e7e'],
+        shapes: ['circle', 'square'],
+        scalar: 1.0,
+        gravity: 0.6,
+        ticks: 80,
+        startVelocity: 20
+      });
+    }
   };
 
   // Wave animation
@@ -154,9 +162,35 @@ export function RelaxationGames() {
             radius: wave.radius + wave.speed
           })).filter(wave => wave.radius < wave.maxRadius)
         );
-      }, 16);
+      }, 20); // Daha yavaş animasyon (10ms yerine 20ms)
 
       return () => clearInterval(interval);
+    } else {
+      setWaves([]); // Clear waves when switching games
+    }
+  }, [currentGame]);
+
+  // Bubble animation
+  useEffect(() => {
+    if (currentGame === "bubbles") {
+      const interval = setInterval(() => {
+        setBubbles(prev =>
+          prev
+            .map(bubble => ({
+              ...bubble,
+              y: bubble.y - bubble.speed
+            }))
+            .filter(bubble => bubble.y + bubble.size > 0) // Üstten çıkınca sil
+        );
+      }, 16);
+
+      const bubbleSpawner = setInterval(() => createBubble(), 800);
+
+      return () => {
+        clearInterval(interval);
+        clearInterval(bubbleSpawner);
+        setBubbles([]);
+      };
     }
   }, [currentGame]);
 
@@ -286,9 +320,9 @@ export function RelaxationGames() {
 
   const resetGame = () => {
     setCurrentGame(null);
-    setBubbles([]);
     setWaves([]);
     setSandPoints([]);
+    setBubbles([]);
     setRipples([]);
     clearSand();
   };
@@ -305,57 +339,36 @@ export function RelaxationGames() {
           <h2 className="text-2xl font-bold text-white">
             {games.find(g => g.id === currentGame)?.name}
           </h2>
-          <button
-            onClick={resetGame}
-            className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white hover:bg-white/20 transition-colors"
-          >
-            Geri Dön
-          </button>
+          <div className="flex gap-2">
+            {currentGame === "sand" && (
+              <button
+                onClick={clearSand}
+                className="px-6 py-3 bg-blue-500/30 backdrop-blur-sm rounded-lg text-white font-semibold hover:bg-blue-500/40 transition-colors border-2 border-blue-400/50 shadow-lg"
+              >
+                🧹 Temizle
+              </button>
+            )}
+            <button
+              onClick={resetGame}
+              className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white hover:bg-white/20 transition-colors"
+            >
+              Geri Dön
+            </button>
+          </div>
         </div>
 
         <div
           ref={canvasRef}
-          className="relative w-full h-96 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 overflow-hidden"
+          className="relative w-full h-96 bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10"
           onClick={handleCanvasClick}
           onMouseMove={currentGame === "sand" ? handleSandMouseMove : undefined}
           style={{ 
             cursor: currentGame === "sand" ? "crosshair" : "pointer",
-            overflow: "hidden",
-            position: "relative"
+            position: "relative",
+            height: "400px", // Fixed height for debugging
+            borderRadius: "13px"
           }}
         >
-          {/* Bubbles */}
-          {currentGame === "bubbles" && (
-            <div 
-              className="absolute inset-0 overflow-hidden"
-              style={{ 
-                overflow: "hidden",
-                position: "relative"
-              }}
-            >
-              {bubbles.map((bubble) => (
-                <div
-                  key={bubble.id}
-                  className="absolute rounded-full bg-gradient-to-br from-blue-400/80 to-purple-400/80 backdrop-blur-sm border border-white/20 shadow-lg cursor-pointer transition-all duration-300 hover:scale-110"
-                  style={{
-                    left: `${bubble.x}%`,
-                    top: `${bubble.y}%`,
-                    width: `${bubble.size}px`,
-                    height: `${bubble.size}px`,
-                    animation: `float ${2 + Math.random() * 2}s ease-in-out infinite`,
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = rect.left + rect.width / 2;
-                    const y = rect.top + rect.height / 2;
-                    popBubble(bubble.id, x, y);
-                  }}
-                />
-              ))}
-            </div>
-          )}
 
           {/* Cool ripple effects */}
           {ripples.map((ripple) => (
@@ -385,22 +398,34 @@ export function RelaxationGames() {
               }}
               style={{
                 background: `
-                  radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
-                  linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)
+                  radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0.1) 50%),
+                  radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.4) 0%, rgba(6, 182, 212, 0.1) 50%),
+                  radial-gradient(circle at 50% 50%, rgba(29, 78, 216, 0.3) 0%, rgba(29, 78, 216, 0.05) 70%),
+                  linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(6, 182, 212, 0.3) 50%, rgba(29, 78, 216, 0.2) 100%)
                 `,
               }}
             >
+              {/* Instruction text */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-none">
+                <p className="text-white/80 text-lg font-medium">
+                  Dalga oluşturmak için tıklayın
+                </p>
+              </div>
+              
               {waves.map((wave) => (
                 <div
                   key={wave.id}
-                  className="absolute border-2 border-blue-400/60 rounded-full pointer-events-none"
+                  className="absolute rounded-full pointer-events-none"
                   style={{
                     left: wave.x - wave.radius,
                     top: wave.y - wave.radius,
                     width: wave.radius * 2,
                     height: wave.radius * 2,
-                    opacity: 1 - (wave.radius / wave.maxRadius),
+                    border: `3px solid rgba(59, 130, 246, ${Math.max(0.2, 1 - wave.radius / wave.maxRadius)})`,
+                    opacity: Math.max(0.1, 1 - wave.radius / wave.maxRadius),
+                    boxShadow: `0 0 ${wave.radius * 0.5}px rgba(59, 130, 246, 0.6)`,
+                    zIndex: 5,
+                    transition: 'none',
                   }}
                 />
               ))}
@@ -453,6 +478,47 @@ export function RelaxationGames() {
                 }}
               />
             </>
+          )}
+
+          {/* Bubbles */}
+          {currentGame === "bubbles" && (
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{
+                background: "linear-gradient(180deg, #93c5fd, #bfdbfe)"
+              }}
+            >
+              {/* Instruction text */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-none z-10">
+                <p className="text-white/80 text-lg font-medium">
+                  Balonları patlatın
+                </p>
+              </div>
+              
+              {bubbles.map(bubble => (
+                <div
+                  key={bubble.id}
+                  onClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = e.clientX;
+                    const y = e.clientY;
+                    popBubble(bubble.id, x, y);
+                  }}
+                  className="absolute rounded-full cursor-pointer hover:opacity-80 transition"
+                  style={{
+                    width: bubble.size,
+                    height: bubble.size,
+                    left: bubble.x,
+                    top: bubble.y,
+                    background:
+                      "radial-gradient(circle at 30% 30%, white, #60a5fa)",
+                    border: "2px solid rgba(255,255,255,0.7)",
+                    boxShadow: "0 0 10px rgba(255,255,255,0.6)",
+                    zIndex: 5
+                  }}
+                ></div>
+              ))}
+            </div>
           )}
         </div>
       </div>
